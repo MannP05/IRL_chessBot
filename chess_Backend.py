@@ -1,26 +1,27 @@
 import pygame
-import numpy as np
-from sample import ChessboardDetector  # Make sure 'sample.py' is in the same directory
+import json
 
-class ChessboardSimulation:
-    def __init__(self, board_size, cell_size=100):
-        pygame.init()
-        self.board_size = board_size
+class Chessboard:
+    def __init__(self, board_file, cell_size=80):
+        self.board_array = self.load_board(board_file)
         self.cell_size = cell_size
-        self.width = board_size[0] * cell_size
-        self.height = board_size[1] * cell_size
+        self.width = len(self.board_array[0]) * cell_size
+        self.height = len(self.board_array) * cell_size
         self.screen = pygame.display.set_mode((self.width, self.height))
-        pygame.display.set_caption("Chessboard Simulation")
-        self.clock = pygame.time.Clock()
-        self.detector = ChessboardDetector(board_size)
+        pygame.display.set_caption("Chessboard")
 
-    def draw_board(self, board_array):
+    def load_board(self, board_file):
+        with open(board_file, 'r') as f:
+            board_array = json.load(f)
+        return board_array
+
+    def draw_board(self):
         colors = [(255, 255, 255), (0, 0, 0)]  # White and Black
-        for i in range(self.board_size[0]):
-            for j in range(self.board_size[1]):
-                color = colors[board_array[i][j]]
+        for i in range(len(self.board_array)):
+            for j in range(len(self.board_array[i])):
+                color = colors[self.board_array[i][j]]
                 pygame.draw.rect(self.screen, color, pygame.Rect(j * self.cell_size, i * self.cell_size, self.cell_size, self.cell_size))
-    
+
     def update(self):
         running = True
         while running:
@@ -28,17 +29,12 @@ class ChessboardSimulation:
                 if event.type == pygame.QUIT:
                     running = False
 
-            board_array = self.detector.get_chessboard_array()
-            if board_array is not None:
-                self.screen.fill((0, 0, 0))
-                self.draw_board(board_array)
-                pygame.display.flip()
-            
-            self.clock.tick(30)  # Limit to 30 FPS
-
-        self.detector.release_camera()
+            self.screen.fill((0, 0, 0))
+            self.draw_board()
+            pygame.display.flip()
         pygame.quit()
 
-if __name__ == "__main__":
-    simulation = ChessboardSimulation((3, 3))
-    simulation.update()
+# Initialize Pygame and create the chessboard
+pygame.init()
+chessboard = Chessboard('chessboard_array.json')
+chessboard.update()

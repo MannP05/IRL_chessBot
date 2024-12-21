@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import json
 
 chessboard_size = (7, 7) 
 cap = cv2.VideoCapture(0)
@@ -24,6 +25,10 @@ while True:
 
         print("Chessboard array (1 = White, 0 = Black):")
         print(chessboard_array)
+
+        #saving 2d array in a json
+        with open('chessboard_array.json', 'w') as f:
+            json.dump(chessboard_array.tolist(), f)
         break
     
 cap.release()
