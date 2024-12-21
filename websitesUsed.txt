@@ -1,0 +1,10 @@
+
+
+Lens Correction (not used):
+    https://blog.roboflow.com/automated-chess-game-recording-computer-vision/ 
+    https://en.wikipedia.org/wiki/Homography_(computer_vision)
+    https://medium.com/@flcamarao/image-processing-using-python-homography-matrix-a5da44f3a57b
+
+
+Open CV :
+    https://docs.opencv.org/4.x/index.html
